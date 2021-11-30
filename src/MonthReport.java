@@ -35,4 +35,22 @@ public class MonthReport {
         System.out.println("Самый прибыльный товар: "+ maxProfitCategory);
         System.out.println("Самая большая трата: "+ maxExpensesCategory);
     }
+    public int calculateExpensesInMonth(){
+        int sum=0;
+        for(MonthReportElement oneElement: monthReport){
+            if(oneElement.isExpense){
+                sum+=oneElement.sumOfOne*oneElement.quantity;
+            }
+        }
+        return sum;
+    }
+    public int calculateProfitInMonth(){
+        int sum=0;
+        for(MonthReportElement oneElement: monthReport){
+            if(!oneElement.isExpense){
+                sum+=oneElement.sumOfOne*oneElement.quantity;
+            }
+        }
+        return sum;
+    }
 }

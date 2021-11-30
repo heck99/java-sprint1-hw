@@ -13,7 +13,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Приложение по финансовому учёту запущено.\nВыберите действие, которое хотите выполнить:");
         HashMap<String, MonthReport> monthReports= new HashMap<>();//структура данных для хранения всех месячных отчётов, возможно стоило использовать List потому что год и месяц записаны в объекте MonthReport
-        HashMap<String, YearReport> yearReports= new HashMap<>();
+        HashMap<String, YearReport> yearReports= new HashMap<>();//в текущем задании существует только один годовой отчёт(из-за чего данная структура не нужна), но при расширении данной программы может понадобится работа с несколькими отчётами, поэтому создадим данную структуру
         while (true) {
             PrintMenu();//выводим меню пользователю
             int command = scanner.nextInt();//считываем введёное число
@@ -23,23 +23,23 @@ public class Main {
             switch (command){
                 case(1):
                     System.out.println("Считать все месячные отчёты");
-                    if (MonthData.size()==0){
+                    if (MonthData.size()==0){//если в директории resources нет месячных отчётов, то сообщим об этом пользователю
                         System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
                     }
-                    for(File file : MonthData){
-                        String fileDAta="";
+                    for(File file : MonthData){//для каждого месячного отчёта
+                        String fileDAta;
                             try {
-                                fileDAta= Files.readString(Path.of(file.getPath()));
-                                String[] allLines = fileDAta.split("\\r\\n");
-                                MonthReport thisMonthReport = new MonthReport(file.getName().split("\\.")[1]);
-                                for (int i=1;i<allLines.length;i++){
-                                    String[] dataArr= allLines[i].split(",");
-                                    MonthReportElement oneElement = new MonthReportElement(dataArr[0],Boolean.parseBoolean(dataArr[1]),Integer.parseInt(dataArr[2]),Integer.parseInt(dataArr[3]));
-                                    thisMonthReport.monthReport.add(oneElement);
+                                fileDAta= Files.readString(Path.of(file.getPath()));//получим содержимое текущего отчёта
+                                String[] allLines = fileDAta.split("\\r\\n");//разделим строки файла
+                                MonthReport thisMonthReport = new MonthReport(file.getName().split("\\.")[1]);//создадим объект месячного отчёта для текущего месяца
+                                for (int i=1;i<allLines.length;i++){//для каждой записи
+                                    String[] dataArr= allLines[i].split(",");// получим все столбцы записи
+                                    MonthReportElement oneElement = new MonthReportElement(dataArr[0],Boolean.parseBoolean(dataArr[1]),Integer.parseInt(dataArr[2]),Integer.parseInt(dataArr[3]));//создадим объект текущей записи
+                                    thisMonthReport.monthReport.add(oneElement);//добавим текущую запись в месячный отчёт
                                 }
-                                monthReports.put(file.getName().split("\\.")[1],thisMonthReport);
+                                monthReports.put(file.getName().split("\\.")[1],thisMonthReport);//добавим месячный отчёт в таблицу со всеми отчётами
                             } catch (IOException e) {
-                                System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
+                                System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл уже открыт.");//если не получается открыть файл уведомим пользователя
                         }
                     }
                     break;
@@ -49,7 +49,7 @@ public class Main {
                         System.out.println("Невозможно прочитать файл сгодовым отчётом. Возможно, файл не находится в нужной директории.");
                     }
                     for(File file : YearData){
-                        String fileDAta="";
+                        String fileDAta;
                         try {
                             fileDAta= Files.readString(Path.of(file.getPath()));
                             String[] allLines = fileDAta.split("\\r\\n");
@@ -66,16 +66,43 @@ public class Main {
                             }
                             yearReports.put(file.getName().split("\\.")[1],thisYearReport);
                         } catch (IOException e) {
-                            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
+                            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл уже открыт.");
                         }
                     }
                     break;
                 case(3):
                     System.out.println("Сверить отчёты");
+                     for(String year : yearReports.keySet()){
+                         int errors=0;
+                         for(YearReportElement oneMonth : yearReports.get(year).yearReport){
+                             int monthExpensesInYearReport= oneMonth.expenses;
+                             int monthProfitInYearReport = oneMonth.profit;
+                             String monthReportName;
+                             if(oneMonth.monthNum<10){
+                                 monthReportName=year+"0"+oneMonth.monthNum;
+                             }else {
+                                 monthReportName=year+oneMonth.monthNum;
+                             }
+                             MonthReport thisMonthReport = monthReports.get(monthReportName);
+                             int monthExpensesInMonthReport = thisMonthReport.calculateExpensesInMonth();
+                             int monthProfitInMonthReport = thisMonthReport.calculateProfitInMonth();
+
+                             if(!(monthExpensesInMonthReport==monthExpensesInYearReport)){
+                                 errors++;
+                                 System.out.println("Ошибка в отчёте по расходам год: "+year+" месяц: "+oneMonth.monthNum);
+                             }
+                             if(!(monthProfitInYearReport==monthProfitInMonthReport)){
+                                 errors++;
+                                 System.out.println("Ошибка в отчёте по доходам год: "+year+" месяц: "+oneMonth.monthNum);
+                             }
+                         }
+                         if(errors==0){
+                             System.out.println("Ошибок в отчётах нет");
+                         }
+                     }
                     break;
                 case(4):
                     System.out.println("Вывести информацию о всех месячных отчётах");
-
                     for(String name: monthReports.keySet()){
                         monthReports.get(name).printInfoForOneMonth();
                     }
@@ -106,11 +133,13 @@ public class Main {
     public static void GetAllFiles(List<File>MonthData,List<File>YearData){
         File folder = new File("resources");
         File[] listOfFiles = folder.listFiles();
-        for(File file : listOfFiles){
-            if(file.getName().startsWith("m.")){
-                MonthData.add(file);
-            }else if(file.getName().startsWith("y.")){
-                YearData.add(file);
+        if(listOfFiles!=null) {
+            for (File file : listOfFiles) {
+                if (file.getName().startsWith("m.")) {
+                    MonthData.add(file);
+                } else if (file.getName().startsWith("y.")) {
+                    YearData.add(file);
+                }
             }
         }
     }
