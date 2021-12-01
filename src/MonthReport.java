@@ -13,6 +13,7 @@ public class MonthReport {
         month=monthName[Integer.parseInt(data.substring(4))-1];
         year=Integer.parseInt(data.substring(0,4));
     }
+    //печатаем информацию из месячного отчёта
     void printInfoForOneMonth(){
         int maxProfit=0;
         String maxProfitCategory="";
@@ -32,9 +33,10 @@ public class MonthReport {
             }
         }
         System.out.println(month);
-        System.out.println("Самый прибыльный товар: "+ maxProfitCategory);
-        System.out.println("Самая большая трата: "+ maxExpensesCategory);
+        System.out.println("Самый прибыльный товар: "+ maxProfitCategory +" " + maxProfit);
+        System.out.println("Самая большая трата: "+ maxExpensesCategory+" " + maxExpenses);
     }
+    //считаем все расходы за месяц
     public int calculateExpensesInMonth(){
         int sum=0;
         for(MonthReportElement oneElement: monthReport){
@@ -44,6 +46,7 @@ public class MonthReport {
         }
         return sum;
     }
+    //считаем всю прибыль за месяц
     public int calculateProfitInMonth(){
         int sum=0;
         for(MonthReportElement oneElement: monthReport){

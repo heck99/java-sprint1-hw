@@ -12,13 +12,8 @@ int profit=0;
             profit=amount;
         }
     }
-    YearReportElement(int month){
-        String[] monthName={"Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"};
-        monthNum=month;
-        expenses=0;
-        profit=0;
-    }
 
+//добавляем трату или прибыль
     public void addDataToMonth(int ammountValue, boolean isExpenseValue) {
         if(isExpenseValue){
             expenses=ammountValue;
@@ -26,6 +21,7 @@ int profit=0;
             profit=ammountValue;
         }
     }
+    //печатаем прибыль за месяц
     public void PrintProfitOneMonth(){
         String[] monthName={"Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"};
         System.out.println("Прибыль в месяце "+ monthName[monthNum-1]+" составила: " + (profit-expenses));

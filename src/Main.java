@@ -17,12 +17,12 @@ public class Main {
         while (true) {
             PrintMenu();//выводим меню пользователю
             int command = scanner.nextInt();//считываем введёное число
+            System.out.println();
             ArrayList<File> MonthData=new ArrayList<>();
             ArrayList<File> YearData=new ArrayList<>();
             GetAllFiles(MonthData, YearData);//считываем все файлы отчёты
             switch (command){
                 case(1):
-                    System.out.println("Считать все месячные отчёты");
                     if (MonthData.size()==0){//если в директории resources нет месячных отчётов, то сообщим об этом пользователю
                         System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
                     }
@@ -42,93 +42,104 @@ public class Main {
                                 System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл уже открыт.");//если не получается открыть файл уведомим пользователя
                         }
                     }
+                    System.out.println("Месячные отчёты успешно считаны");
                     break;
                 case(2):
-                    System.out.println("Считать годовой отчёт");
-                    if (YearData.size()==0){
+                    if (YearData.size()==0){//если нет файлов с месячными отчётами
                         System.out.println("Невозможно прочитать файл сгодовым отчётом. Возможно, файл не находится в нужной директории.");
                     }
-                    for(File file : YearData){
+                    for(File file : YearData){//поочереди открываем каждый файл
                         String fileDAta;
                         try {
-                            fileDAta= Files.readString(Path.of(file.getPath()));
-                            String[] allLines = fileDAta.split("\\r\\n");
+                            fileDAta= Files.readString(Path.of(file.getPath()));//считываем все данные
+                            String[] allLines = fileDAta.split("\\r\\n");//разделяем на строки
                             YearReport thisYearReport = new YearReport();
                             for (int i=1;i<allLines.length;i++){
-                                String[] dataArr= allLines[i].split(",");
-                                if(thisYearReport.containMonth(Integer.parseInt(dataArr[0]))){
-                                    thisYearReport.addDataToMonth(Integer.parseInt(dataArr[0]),Integer.parseInt(dataArr[1]),Boolean.parseBoolean(dataArr[2]));
+                                String[] dataArr= allLines[i].split(",");//разделяем на столбцы
+                                if(thisYearReport.containMonth(Integer.parseInt(dataArr[0]))){//если этот месяц уже добавлен в годовой отчёт
+                                    thisYearReport.addDataToMonth(Integer.parseInt(dataArr[0]),Integer.parseInt(dataArr[1]),Boolean.parseBoolean(dataArr[2]));//добавляем запись в тот же отчёт
                                 }else{
+                                    //создаём новую запись
                                     YearReportElement oneElement = new YearReportElement(Integer.parseInt(dataArr[0]),Integer.parseInt(dataArr[1]),Boolean.parseBoolean(dataArr[2]));
                                     thisYearReport.yearReport.add(oneElement);
                                 }
 
                             }
-                            yearReports.put(file.getName().split("\\.")[1],thisYearReport);
+                            yearReports.put(file.getName().split("\\.")[1],thisYearReport);//добавляем годовой отчёт ко всем отчётам
                         } catch (IOException e) {
                             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл уже открыт.");
                         }
                     }
+                    System.out.println("Годовые отчёты успешно считаны");
                     break;
                 case(3):
-                    System.out.println("Сверить отчёты");
+                    if(yearReports.size()==0|| monthReports.size()==0){
+                        System.out.println("Вы забыли ввести данные");
+                        break;
+                    }
                      for(String year : yearReports.keySet()){
-                         int errors=0;
+                         int errors=0;//счётчик ошибок
                          for(YearReportElement oneMonth : yearReports.get(year).yearReport){
-                             int monthExpensesInYearReport= oneMonth.expenses;
-                             int monthProfitInYearReport = oneMonth.profit;
+                             int monthExpensesInYearReport= oneMonth.expenses;//траты за месяц в годовом отчёте
+                             int monthProfitInYearReport = oneMonth.profit; //прибыль за месяц в годовом отчёте
                              String monthReportName;
+                             //создадим ключ для хэш таблицы месячных отчётов
                              if(oneMonth.monthNum<10){
                                  monthReportName=year+"0"+oneMonth.monthNum;
                              }else {
                                  monthReportName=year+oneMonth.monthNum;
                              }
-                             MonthReport thisMonthReport = monthReports.get(monthReportName);
-                             int monthExpensesInMonthReport = thisMonthReport.calculateExpensesInMonth();
-                             int monthProfitInMonthReport = thisMonthReport.calculateProfitInMonth();
+                             MonthReport thisMonthReport = monthReports.get(monthReportName);//получим месячный отчёт за нужный месяц
+                             int monthExpensesInMonthReport = thisMonthReport.calculateExpensesInMonth();//траты за месяц в месячном отчёте
+                             int monthProfitInMonthReport = thisMonthReport.calculateProfitInMonth();//прибыль за месяц в месячном отчёте
 
-                             if(!(monthExpensesInMonthReport==monthExpensesInYearReport)){
+                             if(!(monthExpensesInMonthReport==monthExpensesInYearReport)){//если ошибка по тратам в отчётах
                                  errors++;
                                  System.out.println("Ошибка в отчёте по расходам год: "+year+" месяц: "+oneMonth.monthNum);
                              }
-                             if(!(monthProfitInYearReport==monthProfitInMonthReport)){
+                             if(!(monthProfitInYearReport==monthProfitInMonthReport)){//если ошибка по прибыли в отчётах
                                  errors++;
                                  System.out.println("Ошибка в отчёте по доходам год: "+year+" месяц: "+oneMonth.monthNum);
                              }
                          }
-                         if(errors==0){
+                         if(errors==0){//если во всех очтётах нет ошибок
                              System.out.println("Ошибок в отчётах нет");
                          }
                      }
                     break;
                 case(4):
-                    System.out.println("Вывести информацию о всех месячных отчётах");
+                    if(monthReports.size()==0){
+                        System.out.println("Вы забыли ввести данные");
+                        break;
+                    }
                     for(String name: monthReports.keySet()){
-                        monthReports.get(name).printInfoForOneMonth();
+                        monthReports.get(name).printInfoForOneMonth();//печатаем месячный отчёт
                     }
                     break;
                 case(5):
-                    System.out.println("Вывести информацию о годовом отчёте");
+                    if(yearReports.size()==0){
+                        System.out.println("Вы забыли ввести данные");
+                        break;
+                    }
                     for(String name: yearReports.keySet()){
-                        yearReports.get(name).printInfoForOneYear(name);
+                        yearReports.get(name).printInfoForOneYear(name);//печатаем годовой отчёт
                     }
                     break;
-                case(0):
+                case(1703)://не совсем понял, про придумать комбинацию для выхода
                     return;
                 default:
                     break;
             }
-
-
         }
     }
     public static void PrintMenu(){
+        System.out.println();
         System.out.println("1: Считать все месячные отчёты");
         System.out.println("2: Считать годовой отчёт");
         System.out.println("3: Сверить отчёты");
         System.out.println("4: Вывести информацию о всех месячных отчётах");
         System.out.println("5: Вывести информацию о годовом отчёте");
-        System.out.println("0: Выход");
+        System.out.println("Для выхода введите год основания Санкт-Петербурга");
     }
     public static void GetAllFiles(List<File>MonthData,List<File>YearData){
         File folder = new File("resources");
