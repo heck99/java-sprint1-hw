@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SwichCAseMethods {
+public class SwichCaseMethods {
 
     public static void caseOne(HashMap<String, MonthReport> monthReports) {
         ArrayList<File> monthData=new ArrayList<>();
@@ -87,6 +87,26 @@ public class SwichCAseMethods {
             if (errors==0) {//если во всех очтётах нет ошибок
                 System.out.println("Ошибок в отчётах нет");
             }
+        }
+    }
+
+    public static void caseFour(HashMap<String, MonthReport> monthReports) {
+        if(monthReports.size()==0){
+            System.out.println("Вы забыли ввести данные");
+            return;
+        }
+        for(String name: monthReports.keySet()){
+            monthReports.get(name).printInfoForOneMonth();//печатаем месячный отчёт
+        }
+    }
+
+    public  static void caseFive(HashMap<String, YearReport> yearReports) {
+        if(yearReports.size()==0){
+            System.out.println("Вы забыли ввести данные");
+            return;
+        }
+        for(String name: yearReports.keySet()){
+            yearReports.get(name).printInfoForOneYear(name);//печатаем годовой отчёт
         }
     }
 
