@@ -3,26 +3,27 @@ int monthNum;
 int expenses=0;
 int profit=0;
 
-    YearReportElement(int month,int amount,boolean is_Expense){
+    YearReportElement(int month,int amount,boolean is_Expense) {
         String[] monthName={"Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"};
         this.monthNum=month;;
-        if(is_Expense){
+        if (is_Expense) {
             expenses=amount;
-        } else{
+        } else {
             profit=amount;
         }
     }
 
-//добавляем трату или прибыль
+    //добавляем трату или прибыль
     public void addDataToMonth(int ammountValue, boolean isExpenseValue) {
-        if(isExpenseValue){
+        if (isExpenseValue) {
             expenses=ammountValue;
-        } else{
+        } else {
             profit=ammountValue;
         }
     }
+
     //печатаем прибыль за месяц
-    public void PrintProfitOneMonth(){
+    public void PrintProfitOneMonth() {
         String[] monthName={"Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"};
         System.out.println("Прибыль в месяце "+ monthName[monthNum-1]+" составила: " + (profit-expenses));
     }

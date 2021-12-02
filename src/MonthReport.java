@@ -21,13 +21,13 @@ public class MonthReport {
         String maxExpensesCategory="";
         for (MonthReportElement oneElement : monthReport){
             if(oneElement.isExpense){
-                if(oneElement.multiplyQuntitySumOfOne()>maxExpenses){
-                    maxExpenses=oneElement.multiplyQuntitySumOfOne();
+                if(oneElement.multiplyQuantitySumOfOne()>maxExpenses){
+                    maxExpenses=oneElement.multiplyQuantitySumOfOne();
                     maxExpensesCategory=oneElement.itemName;
                 }
             }else{
-                if(oneElement.multiplyQuntitySumOfOne()>maxProfit){
-                    maxProfit=oneElement.multiplyQuntitySumOfOne();
+                if(oneElement.multiplyQuantitySumOfOne()>maxProfit){
+                    maxProfit=oneElement.multiplyQuantitySumOfOne();
                     maxProfitCategory= oneElement.itemName;
                 }
             }

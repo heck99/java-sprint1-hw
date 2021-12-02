@@ -14,19 +14,20 @@ public class Main {
         System.out.println("Приложение по финансовому учёту запущено.\nВыберите действие, которое хотите выполнить:");
         HashMap<String, MonthReport> monthReports= new HashMap<>();//структура данных для хранения всех месячных отчётов, возможно стоило использовать List потому что год и месяц записаны в объекте MonthReport
         HashMap<String, YearReport> yearReports= new HashMap<>();//в текущем задании существует только один годовой отчёт(из-за чего данная структура не нужна), но при расширении данной программы может понадобится работа с несколькими отчётами, поэтому создадим данную структуру
+        ArrayList<File> monthData=new ArrayList<>();
+        ArrayList<File> yearData=new ArrayList<>();
+        GetAllFiles(monthData, yearData);//считываем все файлы отчёты
+
         while (true) {
             PrintMenu();//выводим меню пользователю
             int command = scanner.nextInt();//считываем введёное число
             System.out.println();
-            ArrayList<File> MonthData=new ArrayList<>();
-            ArrayList<File> YearData=new ArrayList<>();
-            GetAllFiles(MonthData, YearData);//считываем все файлы отчёты
             switch (command){
                 case(1):
-                    if (MonthData.size()==0){//если в директории resources нет месячных отчётов, то сообщим об этом пользователю
+                    if (monthData.size()==0){//если в директории resources нет месячных отчётов, то сообщим об этом пользователю
                         System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
                     }
-                    for(File file : MonthData){//для каждого месячного отчёта
+                    for(File file : monthData){//для каждого месячного отчёта
                         String fileDAta;
                             try {
                                 fileDAta= Files.readString(Path.of(file.getPath()));//получим содержимое текущего отчёта
@@ -45,10 +46,10 @@ public class Main {
                     System.out.println("Месячные отчёты успешно считаны");
                     break;
                 case(2):
-                    if (YearData.size()==0){//если нет файлов с месячными отчётами
+                    if (yearData.size()==0){//если нет файлов с месячными отчётами
                         System.out.println("Невозможно прочитать файл сгодовым отчётом. Возможно, файл не находится в нужной директории.");
                     }
-                    for(File file : YearData){//поочереди открываем каждый файл
+                    for(File file : yearData){//поочереди открываем каждый файл
                         String fileDAta;
                         try {
                             fileDAta= Files.readString(Path.of(file.getPath()));//считываем все данные
@@ -132,6 +133,7 @@ public class Main {
             }
         }
     }
+
     public static void PrintMenu(){
         System.out.println();
         System.out.println("1: Считать все месячные отчёты");
@@ -141,6 +143,7 @@ public class Main {
         System.out.println("5: Вывести информацию о годовом отчёте");
         System.out.println("Для выхода введите год основания Санкт-Петербурга");
     }
+
     public static void GetAllFiles(List<File>MonthData,List<File>YearData){
         File folder = new File("resources");
         File[] listOfFiles = folder.listFiles();
@@ -154,4 +157,5 @@ public class Main {
             }
         }
     }
+
 }
