@@ -29,6 +29,7 @@ public class Main {
                     SwitchCaseMethods.caseFive(yearReports);
                     break;
                 case(1703)://не совсем понял, про придумать комбинацию для выхода
+                    System.out.println("До свидания!");
                     return;
                 default:
                     break;
