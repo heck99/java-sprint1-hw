@@ -11,7 +11,7 @@ public class MonthReportElement {
         sumOfOne=sum_of_one;
     }
 
-    int multiplyQuantitySumOfOne() {
+    public int multiplyQuantitySumOfOne() {
         return quantity*sumOfOne;
     }
 }
