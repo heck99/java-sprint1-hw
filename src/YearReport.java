@@ -34,21 +34,21 @@ public class YearReport {
     }
 
     //считаем средние траты в месяц
-    private double findAvarageExpenses() {
+    private double findAverageExpenses() {
         int sumExpenses =0;
         for (YearReportElement oneElement : yearReport) {
             sumExpenses+=oneElement.expenses;
         }
-        return sumExpenses/yearReport.size();
+        return (double)sumExpenses/yearReport.size();
     }
 
     //считаем среднюю прибыль в месяц
-    private double findAvarageProfit() {
+    private double findAverageProfit() {
         int sumProfit =0;
         for (YearReportElement oneElement : yearReport) {
             sumProfit+=oneElement.profit;
         }
-        return sumProfit/yearReport.size();
+        return (double) sumProfit/yearReport.size();
     }
 
     //выводим информацию годового отчёта
@@ -57,7 +57,7 @@ public class YearReport {
         for (YearReportElement oneElement: yearReport) {
             oneElement.PrintProfitOneMonth();
         }
-        System.out.println("Средний расход за год составил: "+findAvarageExpenses());
-        System.out.println("Средний доход за год составил: "+findAvarageProfit());
+        System.out.println("Средний расход за год составил: "+findAverageExpenses());
+        System.out.println("Средний доход за год составил: "+findAverageProfit());
     }
 }

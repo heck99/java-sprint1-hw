@@ -14,11 +14,11 @@ int profit=0;
     }
 
     //добавляем трату или прибыль
-    public void addDataToMonth(int ammountValue, boolean isExpenseValue) {
+    public void addDataToMonth(int amountValue, boolean isExpenseValue) {
         if (isExpenseValue) {
-            expenses=ammountValue;
+            expenses=amountValue;
         } else {
-            profit=ammountValue;
+            profit=amountValue;
         }
     }
 

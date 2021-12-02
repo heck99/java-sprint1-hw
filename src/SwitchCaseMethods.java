@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SwichCaseMethods {
+public class SwitchCaseMethods {
 
     public static void caseOne(HashMap<String, MonthReport> monthReports) {
         ArrayList<File> monthData=new ArrayList<>();
@@ -34,7 +34,7 @@ public class SwichCaseMethods {
         if (yearData.size()==0) {//если нет файлов с месячными отчётами
             System.out.println("Невозможно прочитать файл сгодовым отчётом. Возможно, файл не находится в нужной директории.");
         }
-        for(File file : yearData) { //поочереди открываем каждый файл
+        for (File file : yearData) { //поочереди открываем каждый файл
             String fileDAta=readDataFromFile(file.getPath());
             String[] allLines = fileDAta.split("\\r\\n");//разделяем на строки
             YearReport thisYearReport = new YearReport();
@@ -55,7 +55,7 @@ public class SwichCaseMethods {
     }
 
     public static void caseThree(HashMap<String, YearReport> yearReports,HashMap<String, MonthReport> monthReports) {
-        if(yearReports.size()==0|| monthReports.size()==0){
+        if (yearReports.size()==0|| monthReports.size()==0) {
             System.out.println("Вы забыли ввести данные");
             return;
         }
@@ -91,21 +91,21 @@ public class SwichCaseMethods {
     }
 
     public static void caseFour(HashMap<String, MonthReport> monthReports) {
-        if(monthReports.size()==0){
+        if (monthReports.size()==0){
             System.out.println("Вы забыли ввести данные");
             return;
         }
-        for(String name: monthReports.keySet()){
+        for (String name: monthReports.keySet()) {
             monthReports.get(name).printInfoForOneMonth();//печатаем месячный отчёт
         }
     }
 
     public  static void caseFive(HashMap<String, YearReport> yearReports) {
-        if(yearReports.size()==0){
+        if (yearReports.size()==0){
             System.out.println("Вы забыли ввести данные");
             return;
         }
-        for(String name: yearReports.keySet()){
+        for (String name: yearReports.keySet()) {
             yearReports.get(name).printInfoForOneYear(name);//печатаем годовой отчёт
         }
     }
@@ -113,7 +113,7 @@ public class SwichCaseMethods {
     private static void GetAllMonthFiles(List<File> monthData) {
         File folder = new File("resources");
         File[] listOfFiles = folder.listFiles();
-        if(listOfFiles!=null) {
+        if (listOfFiles!=null) {
             for (File file : listOfFiles) {
                 if (file.getName().startsWith("m.")) {
                     monthData.add(file);
@@ -135,7 +135,7 @@ public class SwichCaseMethods {
     private static void GetAllYearFiles(List<File> yearData) {
         File folder = new File("resources");
         File[] listOfFiles = folder.listFiles();
-        if(listOfFiles!=null) {
+        if (listOfFiles!=null) {
             for (File file : listOfFiles) {
                 if (file.getName().startsWith("y.")) {
                     yearData.add(file);
