@@ -4,12 +4,13 @@ public class MonthReport {
     String month;
     int year;
 
-    MonthReport(){
+    MonthReport() {
         monthReport = new ArrayList<>();
     }
 
     MonthReport(String data) {
-        String[] monthName={"Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь",};
+        String[] monthName={"Январь","Февраль","Март","Апрель","Май",
+                "Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь",};
         monthReport = new ArrayList<>();
         month=monthName[Integer.parseInt(data.substring(4))-1];
         year=Integer.parseInt(data.substring(0,4));
@@ -21,14 +22,14 @@ public class MonthReport {
         String maxProfitCategory="";
         int maxExpenses=0;
         String maxExpensesCategory="";
-        for (MonthReportElement oneElement : monthReport){
-            if(oneElement.isExpense){
-                if(oneElement.multiplyQuantitySumOfOne()>maxExpenses){
+        for (MonthReportElement oneElement : monthReport) {
+            if (oneElement.isExpense) {
+                if (oneElement.multiplyQuantitySumOfOne()>maxExpenses) {
                     maxExpenses=oneElement.multiplyQuantitySumOfOne();
                     maxExpensesCategory=oneElement.itemName;
                 }
-            }else{
-                if(oneElement.multiplyQuantitySumOfOne()>maxProfit){
+            } else {
+                if (oneElement.multiplyQuantitySumOfOne()>maxProfit) {
                     maxProfit=oneElement.multiplyQuantitySumOfOne();
                     maxProfitCategory= oneElement.itemName;
                 }
@@ -42,8 +43,8 @@ public class MonthReport {
     //считаем все расходы за месяц
     public int calculateExpensesInMonth() {
         int sum=0;
-        for(MonthReportElement oneElement: monthReport){
-            if(oneElement.isExpense){
+        for (MonthReportElement oneElement: monthReport) {
+            if (oneElement.isExpense) {
                 sum+=oneElement.sumOfOne*oneElement.quantity;
             }
         }
@@ -53,8 +54,8 @@ public class MonthReport {
     //считаем всю прибыль за месяц
     public int calculateProfitInMonth() {
         int sum=0;
-        for(MonthReportElement oneElement: monthReport){
-            if(!oneElement.isExpense){
+        for (MonthReportElement oneElement: monthReport) {
+            if (!oneElement.isExpense) {
                 sum+=oneElement.sumOfOne*oneElement.quantity;
             }
         }
