@@ -32,6 +32,7 @@ public class Main {
                     break;
                 case(1703)://не совсем понял, про придумать комбинацию для выхода
                     System.out.println("До свидания!");
+                    scanner.close();
                     return;
                 default:
                     System.out.println("Данной команды не существует");

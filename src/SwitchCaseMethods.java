@@ -17,10 +17,8 @@ public class SwitchCaseMethods {
             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
         }
         for (File file : monthData) {//для каждого месячного отчёта
-            String fileDAta = readDataFromFile(file.getPath());
-            if (fileDAta == null) {
-                System.out.println("Не удалось прочитать файл " + file.getName());
-            } else {
+            String fileDAta = readDataFromFile(file);
+            if (fileDAta != null)  {
                 String[] allLines = fileDAta.split("\\r\\n");//разделим строки файла
                 //создадим объект месячного отчёта для текущего месяца
                 MonthReport thisMonthReport = new
@@ -47,10 +45,8 @@ public class SwitchCaseMethods {
             System.out.println("Невозможно прочитать файл сгодовым отчётом. Возможно, файл не находится в нужной директории.");
         }
         for (File file : yearData) { //поочереди открываем каждый файл
-            String fileDAta=readDataFromFile(file.getPath());
-            if (fileDAta==null) {
-                System.out.println("Не удалось прочитать файл "+ file.getName());
-            } else {
+            String fileDAta=readDataFromFile(file);
+            if (fileDAta != null) {
                 String[] allLines = fileDAta.split("\\r\\n");//разделяем на строки
                 YearReport thisYearReport = new YearReport();
                 for (int i = 1; i < allLines.length; i++) {
@@ -145,12 +141,14 @@ public class SwitchCaseMethods {
         }
     }
 
-    private static String readDataFromFile(String path) {
+    private static String readDataFromFile(File file) {
         String fileDAta="";
         try {
-            fileDAta= Files.readString(Path.of(path));//получим содержимое текущего отчёта
+            fileDAta= Files.readString(Path.of(file.getPath()));//получим содержимое текущего отчёта
         } catch (IOException e) {
             //если не получается открыть файл
+            //у меня данный вывод был в методах readYearReports и readMonthReports, если там ловится null
+            System.out.println("Не удалось прочитать файл "+ file.getName());
             return null;
         }
         return fileDAta;
